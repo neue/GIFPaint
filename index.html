@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<!-- 
+
+ @@@@@@@@  @@@  @@@@@@@@  @@@@@@@    @@@@@@   @@@  @@@  @@@  @@@@@@@  
+@@@@@@@@@  @@@  @@@@@@@@  @@@@@@@@  @@@@@@@@  @@@  @@@@ @@@  @@@@@@@  
+!@@        @@!  @@!       @@!  @@@  @@!  @@@  @@!  @@!@!@@@    @@!    
+!@!        !@!  !@!       !@!  @!@  !@!  @!@  !@!  !@!!@!@!    !@!    
+!@! @!@!@  !!@  @!!!:!    @!@@!@!   @!@!@!@!  !!@  @!@ !!@!    @!!    
+!!! !!@!!  !!!  !!!!!:    !!@!!!    !!!@!!!!  !!!  !@!  !!!    !!!    
+:!!   !!:  !!:  !!:       !!:       !!:  !!!  !!:  !!:  !!!    !!:    
+:!:   !::  :!:  :!:       :!:       :!:  !:!  :!:  :!:  !:!    :!:    
+ ::: ::::   ::   ::        ::       ::   :::   ::   ::   ::     ::    
+ :: :: :   :     :         :         :   : :  :    ::    :      :     
+
+                 ~ ~ ~ ALIASING WILL NEVER DIE ~ ~ ~
+ 
+-->
+
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>GIFPaint - It's like MSPaint for GIFs!</title>
+	<link rel="stylesheet" href="assets/reset.css" type="text/css"/>
+	<link rel="stylesheet" href="/assets/GIFPaint.css" type="text/css"/>
+	<link rel="stylesheet" href="/libs/jquery.miniColors.css" type="text/css">
+	
+	<script src="/libs/jquery-1.9.1.min.js" type="text/javascript"></script>
+	<script src="/libs/jquery.hotkeys.js" type="text/javascript"></script>
+	<script src="/libs/processing-1.4.1.min.js" type="text/javascript"></script>	
+	<script src="/libs/jquery.miniColors.min.js" type="text/javascript"></script>
+	<script src="/libs/filereader.js" type="text/javascript"></script>
+	<script src="/libs/libgifReader.js" type="text/javascript"></script>
+	<script src="/libs/omggif.js" type="text/javascript"></script>
+	<script src="/js/GIFPaintUI.js" type="text/javascript"></script>
+
+
+	
+</head>
+<body>
+	<header>
+		<img src="assets/GIFPaint-logo.gif" width="60" height="60" alt="GIFPaint">
+		<h1>GIFPaint</h1>
+		<a href="#" id="showModal">New GIF</a>
+		<a href="#" id="encode">Save GIF</a>
+		<a href="http://gifpaint.tumblr.com" target="_blank ">Gallery</a>
+		<a href="#" id="showAbout">Help</a>
+		<div id="tumblrStatus">
+			<a href="About" id="login">Login with Tumblr</a>
+		</div>
+	</header>
+<div id="container">	
+	<div class="row" id="canvasRow">
+		<div id="tools">
+			<button title="Paintbrush (B)" class="tool selected" id="tool_paint"></button>
+			<button title="Fill Bucket (F)" class="tool" id="tool_fill" ></button>
+			<button title="Ink Dropper (I)" class="tool" id="tool_ink"  ></button>
+			<button title="Camera" class="tool" id="tool_camera"  ></button>
+			<button title="GifBrush" class="tool" id="tool_gifbrush"  ></button>
+			<div class="brushSize">
+				<input title="Brush Size (+/-)" type="range" id="size" name="size" min="1" max="34" value="5" />
+				<div id="brushSizeValue">5</div>
+			</div>
+		</div>
+		<div id="canvasHolder">
+			<div id="canvasBorder">
+				<canvas id="paintCanvas" class="paint" data-processing-sources="/js/GIFPaint.js /libs/EFLA.js /libs/FloodFill.js /libs/GifBrush.js"></canvas>								
+			</div>
+		</div>
+		<div id="colours">
+			<div class="well">				
+				<input type="input" class="hexColour" id="leftColour" name="leftColour" value="#000000" />
+			</div>
+			<div class="well">
+				<input type="input" class="hexColour" id="rightColour" name="rightColour" value="#FFFFFF" />									
+			</div>
+			
+			<div id="palette">
+				<div class="col1"></div>
+				<div class="col2 alt"></div>
+				<div class="col3"></div>
+				<div class="col4 alt"></div>
+				<div class="col5"></div>
+				<div class="col6 alt"></div>
+				<div class="col7"></div>
+				<div class="col8 alt"></div>
+				<div class="col9"></div>
+				<div class="col10 alt"></div>
+				<div class="col11"></div>
+				<div class="col12 alt"></div>
+				<div class="col13"></div>
+				<div class="col14 alt"></div>
+				<div class="col15"></div>
+				<div class="col16 alt"></div>
+				<div class="col17"></div>
+				<div class="col18 alt"></div>
+				<div class="col19"></div>
+				<div class="col20 alt"></div>
+			</div>
+			
+			
+			<div id="webcamPreviewHolder">
+				<video id="webcamPreview" autoplay></video>
+				<button title="Turn Webcam off" name="stopCamera" id="stopCamera">Stop</button>
+			</div>
+			
+			
+			
+			<div id="gifBrushPanel" class="sidePanel hidden">
+				<div class="sidePanelTitle">
+					GIFBrush
+				</div>
+				<div class="sidePanelContent">
+					<div class="colPreview">
+						<div id="gifBrushPreview" class="instruction">
+							<canvas id="gifBrushPreviewCanvas" width="66" height="66"></canvas>
+						</div>
+						<div id="gifBrushInfo"></div>						
+					</div>
+					<div class="colModes">
+						<a href="#" class="modeButton selected" id="gifBrush_Mode1" class="selected"><div class="modeIcon"></div><span>Dots</span></a>
+						<a href="#" class="modeButton" id="gifBrush_Mode2"><div class="modeIcon"></div><span>Line</span></a>
+						<a href="#" class="modeButton" id="gifBrush_Mode3"><div class="modeIcon"></div><span>Spray</span></a>
+						<a href="#" class="modeButton" id="gifBrush_Mode4"><div class="modeIcon"></div><span>Place</span></a>						
+						<a href="#" class="modeButton" id="gifBrush_Mode5"><div class="modeIcon"></div><span>Stretch</span></a>						
+					</div>
+				</div>
+			</div>
+			<div id="library" class="sidePanel hidden">
+				<div class="sidePanelTitle">
+					Library
+				</div>
+				<div class="sidePanelContent">
+					<div id="selector">
+						<select name="libraries" id="libraries">
+							<option value="Default">GIFPaint Default</option>
+							<option value="Emoji">Apple Emoji</option>
+						</select>
+						<div id="libraryArtist">
+							
+						</div>
+					</div>
+					<div id="brushes">
+					</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>	
+	</div>
+	<div class="row timelineRow" id="toolsRow">
+		<div class="timelineHolder">
+			<div class="timeline">				
+				<button title="Previous Frame" class="tool" id="tool_prevFrame">Prev</button>
+				<button title="Play/Pause" class="tool" id="tool_play">Play</button>
+				<button title="Next Frame" class="tool" id="tool_nextFrame">Next</button>
+				<button class="tool" id="currentFrame"></button>
+				<input type="range" id="framenumber" name="framenumber" min="0" max="1" />
+				<button class="tool" id="totalFrames"></button>
+			</div>
+			<div class="timelineTools">
+				<button title="Add Frame (A)" class="tool" id="tool_addFrame">+</button>
+				<button title="Remove Frame" class="tool" id="tool_removeFrame">-</button>
+				<button title="Copy Frame (C)" class="tool" id="tool_copy">Copy</button>
+				<button title="Paste Frame (P)" class="tool" id="tool_paste">Paste</button>
+				<button title="Undo (Z)" class="tool" id="tool_undo">Undo</button>
+				<div class="animSpeed">
+					<label for="playSpeed">Animation Speed:</label>
+					<input type="range" id="playSpeed" name="playSpeed" min="0" max="100" value="80" />					
+				</div>
+				<button title="Toggle Onion Skin - Next Frame" class="tool" id="tool_onionNext">Onion</button>
+				<button title="Toggle Onion Skin - Previous Frame" class="tool" id="tool_onion">Onion</button>
+			</div>
+		</div>
+	</div>
+	<div id="options" class="row timelineRow">
+		<div class="timelineHolder">
+				<button title="Toggle Tracing Layer, drag images or GIFs to the canvas to load them" class="tool" id="tool_tracing">Tracing</button>
+			<div class="tracingOpac">	
+				<label for="tracingOpacity" class="disabled">Tracing Layer Opacity</label>
+				<input type="range" class="disabled" id="tracingOpacity" name="tracingOpacity" disabled="disabled" min="1" max="255" value="255" />
+			</div>
+		</div>	
+	</div>
+	<div class="row footer">
+		Send feedback, bugs and GIFs to <a href="https://twitter.com/neuemodern" target="_blank">@neuemodern</a>
+	</div>
+</div>
+
+<div class="modal closed"  id="feedModal">
+	<h3>Preview</h3>
+	<div class="encodeHolder">
+
+	</div>
+</div>
+<div id="lightbox" class="lightoff"></div>
+<div class="modal closed" id="newGifModal">
+    <h3>New Gif</h3>
+  <div>
+    <form>
+	  <label for="newGifWidth">Width</label>
+	  <input id="newGifWidth" name="newGifWidth" value="500"/>
+	  <label for="newGifHeight">Height</label>
+	  <input id="newGifHeight" name="newGifHeight" value="500"/>
+	  <label for="newGifFrames">Frames</label>
+	  <input id="newGifFrames" name="newGifFrames" value="5"/>
+	</form>
+  </div>
+  <div class="modal-buttons">
+    <a href="#" id="closeModal">Close</a>
+    <a href="#" id="initNewGif">New Gif</a>
+  </div>
+</div>
+
+<div class="modal closed"  id="chromeMessage">
+	<img src="/assets/Chrome.gif" width="100" height="100" alt="Chrome">
+	Currently GIFPaint supports <a target="_blank" href="http://chrome.google.com">Chrome</a>.
+	<div class="modal-buttons">
+		<a href="#" id="closeChromeModal">Close</a>
+	</div>
+</div>
+
+<div class="modal closed" id="helpModal">
+	<div class="helpInfo">
+		<img src="/assets/GIFPaint-LogoBig.gif"/>
+		<h3>GIFPaint</h3>
+		<h4>Release 4</h4>
+		<p>HTML5 animation application inspired by MacPaint, Deluxe Paint and MSPaint.</p>
+		<p>GIFPaint was created by <a href="https://twitter.com/neuemodern" target="_blank">James Hicks</a></p>
+		<div class="modal-buttons">
+			<a href="#" id="closeHelpModal">Close</a>
+		</div>
+	</div>
+	<img src="/assets/Help.png" width="657" height="532" class="helpImg">
+</div>
+
+<div class="modal closed" id="aboutModal">
+	<div class="message">
+	<img src="/assets/GIFPaint-LogoBig.gif"/>
+	<h3>GIFPaint</h3>
+	<h4>Release 4</h4>
+		<p>A simple HTML5 animation application inspired by MacPaint, Deluxe Paint and MSPaint.</p>
+		<p>Created by <a href="http://neuemodern.com/" target="_blank">James Hicks</a>, if you have any feedback or bugs you can get in touch on <a href="https://twitter.com/gifpaint" target="_blank">Twitter</a> or info (at symbol) gifpaint.com. I'd also love to see any cool GIFs you make using GIFPaint and will reblog them to the <a href="http://gifpaint.tumblr.com" target="_blank">GIFPaint Tumblog</a></p>	
+		<p>GIFPaint was made possible using the following Open Source projects: 
+			<a href="http://processingjs.org/" target="_blank">Processing.js</a>, <a href="https://github.com/deanm/omggif" target="_blank">omggif</a>, <a href="https://github.com/shachaf/jsgif" target="_blank">jsgif</a>, <a href="http://bgrins.github.com/filereader.js/" target="_blank">FileReader.js</a>, <a href="http://jquery.com/" target="_blank">jQuery</a></p>
+	</div>
+	<div class="modal-buttons">
+		<a href="#" id="closeAboutModal">Close</a>
+	</div>
+	
+</div>
+
+<div class="modal closed" id="tipsModal">
+	<h3>Using GIFPaint</h3>
+<p>GIFpaint is very much a work in progress, some things might break/change/improve in the coming weeks.</p>
+	<p>All tools in GIFPaint use both mouse buttons, Left Button draws/fills/grabs the first colour well and Right Button uses the second colour well</p>
+
+	<p>GIFPaint has shortcut keys for most things:</p>
+
+	<ul>
+		<li><strong>Left Arrow</strong> - Previous Frame</li>
+		<li><strong>Right Arrow</strong> - Next Frame</li>
+		<li><strong>Z</strong> - Undo</li>
+		<li><strong>A</strong> - Add Frame</li>
+		<li><strong>C</strong> - Copy Frame</li>
+		<li><strong>P</strong> - Paste Frame</li>
+		<li><strong>B</strong> - Brush Tool</li>
+		<li><strong>F</strong> - Fill Bucket Tool</li>
+		<li><strong>I</strong> - Ink Dropper Tool</li>
+		<li><strong>T</strong> - Take Webcam Photo</li>
+		<li><strong>+</strong> - Increase Brush Size</li>
+		<li><strong>-</strong> - Decrease Brush Size</li>
+		<li><strong>X</strong> - Swap left and right colours</li>
+		<li><strong>[ and ]</strong> - Toggle Onion Skins</li>
+	</ul>
+
+	<p>Shortcut keys in GIFPaint are simply the keys, you don't need to hold Command or CTRL. Hold shift and click with the Brush Tool to draw straight lines.</p>
+	<h3>Saving Files</h3>
+	<p>Multiple GIFs can be encoded in parallel, once encoded they are not saved anywhere so if you wish to keep them click Download or login to Tumblr and post them straight to Tumblr.</p>
+	<h3>Opening Files</h3>
+	<p>Drag any GIF to the canvas and your current document will be replaced by a blank document with the GIF on a tracing layer. The tracing layer can be toggled or changed in opacity</p>
+	<p>If the tracing layer is visible when you hit encode, then it will be encoded into the GIF. Keep in mind the current GIF encoder doesn't handle photos well, this will be addressed in the future.</p>
+	<p>Any JPG or PNG dragged to the canvas will be added to the current tracing layer. You can also use CMD+V on Macs and CTRL+V on Windows to paste the current contents of the clipboard if its an image.</p>
+	<h3>Known Issues</h3>
+	<p>GPU accelerated 2D canvas causes errors with the Fill Tool with some graphics cards in Chrome. Type "chrome://flags/" into the address bar and check "Disable accelerated 2D canvas" to fix this and speed up drawing in general.</p>
+	<p>Webcam captures look better with smaller canvas sizes.</p>
+	<p>Webcam currently only works in Chrome</p>
+</div>
+<video  id="webcamCapture" autoplay></video>
+<canvas id="webcamCanvas" />
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-1785017-7']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body>
+</html>

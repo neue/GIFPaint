@@ -1,0 +1,960 @@
+body {
+    font: 13px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background-color: #fff;
+    color: #0D0D0D;
+}
+
+button {
+	font: 13px "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+#container {
+    min-width: 700px;
+}
+
+a {
+	color: #0033FF;
+}
+
+a:hover {
+	color: #E44A5F;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    background-color: #9B9B9B;
+    height: 4px;
+}
+ 
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    z-index: 1;
+    width:  20px;
+    height: 20px;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+    border: 2px solid #666666;
+    background-color:#fff;
+}
+
+.disabled {
+    opacity: 0.5;
+    -moz-opacity: 0.5;
+    filter:alpha(opacity=50);
+}
+
+/* Header */
+
+header {
+    position: fixed;
+    top:  0px;
+    left: 0px;
+    display: block;
+    width: 100%;
+    min-width: 900px;
+    height: 82px;
+    background-color: rgba(255,255,255,0.8);
+}
+
+header img {
+    margin: 10px;
+    float: left;
+}
+
+header h1 { 
+    font-weight: bold;
+    float: left;
+    margin: 35px 10px 0px 10px;
+}
+
+a { text-decoration: none; }
+
+header a, header .headerButton, .modal-buttons a {
+    display: block;
+    float: left;
+    height: 24px;
+    padding: 6px 19px 0px 19px;
+    margin: 29px 10px 0px 10px;
+    font-weight: bold;
+    background-color: #F0F0F0;
+    border: 1px solid #F0F0F0;
+    color: #0D0D0D;
+    border-radius: 3px;
+}
+
+header a:hover, header .headerButton:hover, .modal-buttons a:hover {
+    color: #fff;
+    border: 1px solid #0033FF;
+    background-color: #0033FF;
+}
+
+header a:active, header .headerButton:active, .modal-buttons a:active {
+    border: 1px solid #E44A5F;
+    background-color: #E44A5F;
+}
+
+#tumblrStatus a {
+    color: #F0F3F7;
+    border: 1px solid #304661;
+    background: #304661 url('/assets/tumblrIcon.png') no-repeat 5px 5px;
+    padding: 6px 19px 0px 32px;
+}
+
+#tumblrStatus a:hover {
+    color: #304661;
+    border: 1px solid #304661;
+    background: #9CACBA url('/assets/tumblrIcon.png') no-repeat 5px -25px;
+}
+
+#tumblrStatus a.loading {
+    background-image: url('/assets/tumblrSpinner.gif');
+}
+#tumblrStatus a.loading:hover {
+    color: #F0F3F7;
+    border: 1px solid #304661;
+    background-color: #304661;
+    background-image: url('/assets/tumblrSpinner.gif');
+    background-position: 5px 5px;
+}
+
+#tumblrStatus img {
+    float: left;
+    width:  20px;
+    height: 20px;
+    margin: 34px 0px 0px 0px;
+}
+
+#tumblrStatus strong {
+    float: left;
+    font-weight: bold;
+    color: #304661;
+    margin: 36px 0px 0px 5px;
+}
+
+header #tumblrStatus {
+    float: right;
+}
+
+.row, .renderArea {
+    width:100%;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    display: -moz-box;
+    -moz-box-pack: center;
+    background-color: #fff;
+}
+
+.row { padding-bottom:30px ;}
+
+#canvasRow {
+	padding-top: 103px;
+}
+
+#canvasHolder {
+/*    min-width: 300px;
+    min-height: 300px;
+*/    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-align: center;
+    display: -moz-box;
+    -moz-box-pack: center;
+    -moz-box-align: center;
+}
+
+#canvasBorder {
+    border: 2px solid #666666;    	
+}
+
+#canvasBorder:hover {
+	border-color: #000;
+}
+
+#canvasBorder.drag {
+	border-color: #0033FF;
+}
+
+#paintCanvas {
+    background-color: #F0F0F0;
+    display: block;
+    image-rendering: pixelated !important;
+}
+
+#paintCanvas:focus {
+	outline: none;
+}
+
+#paintCanvas.drag {
+	border-color: #0033FF;
+}
+
+/* Cursors */
+
+#paintCanvas.paint {
+    cursor: url('/assets/Brush.cur') 0 2, crosshair;	
+}
+
+#paintCanvas.fill {
+    cursor: url('/assets/FillBucket.cur') 2 32,crosshair;	
+}
+
+#paintCanvas.inkdropper {
+    cursor: url('/assets/InkDropper.cur') 0 32, crosshair;	
+}
+
+#paintCanvas.camera {
+    cursor: url('/assets/Camera.cur') 10 9, crosshair;	
+}
+
+#paintCanvas.gifbrush {
+    cursor: url('/assets/GifBrush.cur') 17 22, crosshair;	
+}
+
+/* Tools */
+
+#tools {
+    width: 42px;
+    margin-right: 10px;
+	padding-left: 50px;
+}
+
+#tools .tool {
+    width: 42px;
+    height: 42px;
+    border: none;
+    background-color: transparent;
+    margin-bottom: 10px;
+}
+
+.tool:focus, #framenumber:focus, #playSpeed:focus, #size:focus, #tracingOpacity:focus {
+	outline:none;
+    
+}
+#tool_paint    {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: 0px 0px;}
+#tool_fill     {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: -42px 0px;}
+#tool_ink      {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: -84px 0px;}
+#tool_camera   {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: -126px 0px;}
+#tool_gifbrush {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: -168px 0px;}
+
+#tools .tool:hover { background-position-y: -42px; }
+#tools .tool.selected { background-position-y: -84px; }
+
+#tool_camera { display:none;}
+
+.brushSize {
+    width: 42px;
+    background-color: #F0F0F0;
+    background-image: url('/assets/IconBrushSize.png');
+    background-position: 5px 5px;
+    background-repeat: no-repeat;
+    border-radius: 3px;
+    padding: 40px 0px 5px;
+}
+
+#brushSizeValue {
+	text-align: center;
+	font-weight: bold;
+	color: #545454;
+}
+
+#size {
+    width: 42px;
+	height: 110px;
+    -webkit-appearance: slider-vertical;
+}
+
+.animSpeed, .tracingOpac {
+	float: left;
+	position: relative;
+	top: 6px;
+}
+
+.animSpeed label {
+	position: relative;
+	top: 3px;
+}
+#colours {
+/*    width: 42px;*/
+    width: 92px;
+    margin-left: 10px;    
+}
+
+.well {
+	margin-bottom: 10px;
+}
+
+.hexColour {
+    width:50px;
+}
+
+#palette {
+	float: left;
+	width: 92px;
+}
+
+#palette.hidden {
+	display: none;
+}
+
+#palette div {
+	float: left;
+	width:  25px;
+	height: 25px;
+	margin: 1px 5px 5px 1px;
+	border: 1px solid #ECECEC;
+	outline : 1px solid #555;
+}
+
+#palette div.alt { margin-right: 0px; }
+
+
+.timelineHolder {
+    width: 534px;   
+    background-color: #F0F0F0;
+    border: 2px solid #F0F0F0;
+    border-radius: 3px;
+    padding: 10px;
+}
+
+
+#currentFrame { cursor: w-resize; }
+#totalFrames { cursor: e-resize; }
+
+#framenumber {
+    width: 331px;
+    margin-top: 12px;
+}
+
+.timelineRow .tool {
+	display: inline-block;
+    width:  30px;
+    height: 30px;
+	background-color: #fff;
+	border: 1px solid #CCCCCC;
+	border-radius: 3px;
+	color: transparent;
+}
+
+
+.timeline,.timelineTools { float: left; width:100%;}
+#tool_undo, #tool_copy, #tool_paste { float: left; margin-right: 10px;}
+#tool_play, #tool_prevFrame, #tool_nextFrame, #tool_addFrame, #currentFrame, #framenumber, #tool_removeFrame, #tool_tracing { 
+    float: left; margin-right: 10px;
+}
+
+#totalFrames {
+	float: left;
+}
+
+#tool_onion, #tool_onionNext, #tool_options { float: right; margin-left: 10px; }
+
+
+#tool_play         {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position:  0px 0px;}
+#tool_play.paused  {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -28px 0px;}
+#tool_prevFrame    {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -280px 0px;}
+#tool_nextFrame    {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -308px 0px;}
+#tool_addFrame     {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -56px 0px;}
+#tool_removeFrame  {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -84px 0px;}
+#tool_undo         {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -112px 0px;}
+#tool_copy         {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -140px 0px;}
+#tool_paste        {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -168px 0px;}
+#tool_onion        {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -196px 0px;}
+#tool_onionNext    {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -224px 0px;}
+#tool_tracing      {background: #fff url('/assets/Icons-Funtions.png') no-repeat top left; background-position: -252px 0px;}
+
+#toolsRow .tool.on, #options .tool.on {
+    background-position-y: -28px; 
+	background-color: #676767;
+	border: 1px solid #676767;
+}
+
+
+#toolsRow .tool:hover, #options .tool:hover { 
+    background-position-y: -28px; 
+    background-color: #0033FF;
+    border: 1px solid #0033FF;
+}
+#toolsRow .tool:active , #options .tool:active { 
+    background-position-y: -28px; 
+    background-color: #E44A5F;
+    border: 1px solid #E44A5F;
+}
+
+#currentFrame, #totalFrames {
+	-webkit-user-select: none; 
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    color: #000;
+}
+
+#toolsRow #currentFrame:hover, #toolsRow #totalFrames:hover {
+    background-color: #fff;
+	border: 1px solid #CCCCCC;
+	color: #000;
+}
+
+.timelineTools {
+    margin-top: 10px;
+}
+
+#tool_ink   {background:transparent url('Icons-Tools.png') no-repeat top left; background-position: -84px 0px;}
+
+#tools .tool:hover { background-position-y: -42px; }
+#tools .tool.selected { background-position-y: -84px; }
+
+#options label  { width:90px; }
+#options input  { width:155px; }
+    
+#webcamCapture,#webcamCanvas {
+	display:none; 
+}
+
+#webcamPreviewHolder {
+	background-color: #F0F0F0;
+    border: 2px solid #F0F0F0;
+    border-radius: 3px;
+	padding: 2px;
+	width: 100px;
+	margin-top: 20px;
+	position: absolute;
+	display: none;
+}
+
+#webcamPreview {
+	display: block;
+	background: #545454 url('/assets/CameraMissing.png') no-repeat 28px 18px;
+	width: 100px;
+	height: 75px;
+	cursor: url('/assets/Camera.cur') 10 9, crosshair;
+}
+
+#webcamPreviewHolder #stopCamera {
+	position: absolute;
+	right:4px;
+	top:4px;
+	color: transparent;
+	background: transparent url('/assets/CloseSmall.png') no-repeat 0px 0px;
+	width: 17px;
+	height: 17px;
+}	
+
+#webcamPreviewHolder #stopCamera:hover {
+	background-position: 0px -17px;	
+	cursor: pointer;
+}
+
+/* Tool Panels */
+
+.sidePanel {
+	background-color: #fff;
+	border: 4px solid #F0F0F0;
+	border-radius: 3px;
+	float: left;
+	margin-bottom: 10px;
+}
+
+.sidePanel.hidden {
+	display: none;
+}
+
+.sidePanelTitle {
+	width: 100%;
+	float: left;
+	height: 22px;
+	padding-top: 1px;
+	background-color: #F0F0F0;
+	font-weight: bold;
+    color: #7E7E7E;
+	text-align: center;
+}
+
+.sidePanelContent {
+	padding: 5px 5px 0px 5px ;
+	float: left;
+}
+
+.colPreview {
+	float: left;
+	width: 70px;
+}
+
+.colModes {
+	float: left;
+	width: 66px;
+	margin-left: 4px;
+}
+
+#gifBrushPreview {
+	display: block;
+	width:  66px;
+	height: 66px;
+	border: 2px solid #666666;  
+}
+
+#gifBrushPreview.instruction {
+	background-image: url("DropGifHere.png");
+	background-repeat: no-repeat;  	
+	
+}
+
+#gifBrushPanel,#library { width: 158px;}
+
+#library #brushes {
+	max-height :200px;
+	width: 145px;
+	overflow-y: scroll;
+}
+
+#libraryArtist {
+	text-align: center;
+	font-size: 12px;
+	padding: 5px 0px;
+}
+
+
+#gifBrushPreview.drag {
+	border-color: #0033FF;
+}
+
+#gifBrushInfo {
+	font-size: 11px;
+	text-align: center;
+	margin-top: 4px;
+}
+
+#gifBrushPanel .modeButton {
+	color: #0D0D0D;
+	background-color: #ECECEC;
+    border: 1px solid #ECECEC;
+    border-radius: 3px;
+	padding: 2px 0px 2px 1px;
+	float: left;
+	clear: left;
+	margin-bottom: 4px;
+	width: 66px;
+	text-align: left;
+}	
+
+#gifBrushPanel .modeButton:hover {
+    color: #fff;
+    background-color: #0033FF;	
+    border: 1px solid #0033FF;
+}
+
+#gifBrushPanel .modeButton.selected {
+	background-color: #545454;
+    border: 1px solid #545454;
+	color: #fff;
+}
+
+.modeButton span {
+	float: left;
+	margin-top: 2px;
+	margin-left: 2px;
+}
+.modeIcon {
+	width: 19px;
+	height: 19px;
+	float: left;
+}
+#gifBrush_Mode1 .modeIcon{
+	background-image: url("Icons-GifBrushModes.png");
+	background-position: 0px 0px;
+	background-repeat: no-repeat;
+}
+#gifBrush_Mode2 .modeIcon{
+	background-image: url("Icons-GifBrushModes.png");
+	background-position: -19px 0px;
+	background-repeat: no-repeat;
+}
+#gifBrush_Mode3 .modeIcon{
+	background-image: url("Icons-GifBrushModes.png");
+	background-position: -38px 0px;
+	background-repeat: no-repeat;
+}
+#gifBrush_Mode4 .modeIcon{
+	background-image: url("Icons-GifBrushModes.png");
+	background-position: -57px 0px;
+	background-repeat: no-repeat;
+}
+
+#gifBrush_Mode5 .modeIcon{
+	background-image: url("Icons-GifBrushModes.png");
+	background-position: -76px 0px;
+	background-repeat: no-repeat;
+}
+
+#gifBrushPanel .modeButton:hover .modeIcon, #gifBrushPanel .modeButton.selected .modeIcon {
+	background-position-y: -19px;
+}
+
+#library #brushes img {
+	width: 29px;
+	height: 29px;
+}
+
+#library #brushes img:hover {
+    background-color: #F0F0F0;
+	cursor: pointer
+}
+
+/* Render Area */
+
+.renderArea {
+	background: transparent url('/assets/shadow.png') repeat-x top;
+	display: block;  
+	margin-bottom: 40px;  
+	float: left;
+}
+
+.renderHeader, .noGifs {
+    text-align: center;
+	width: 100%;
+}
+
+.noGifs {
+	font-weight: bold;
+}
+
+.renderArea .renderHeader h1 {
+    padding: 6px 12px;
+    margin: 20px 0px;
+    background-color: #FFFFFF;
+    border: 1px solid #F0F0F0;
+    color: #0D0D0D;
+    border-radius: 3px;
+    display: inline-block;
+	font-weight: bold;
+	-moz-box-shadow:    0px 3px 4px rgba(0,0,0,0.25);
+	-webkit-box-shadow: 0px 3px 4px rgba(0,0,0,0.25);
+	box-shadow:         0px 3px 4px rgba(0,0,0,0.25);
+}
+
+.render {
+	display: block;
+	float: left;
+	background-color: #fff;
+	padding: 10px;
+	-moz-box-shadow:    0px 3px 4px rgba(0,0,0,0.25);
+	-webkit-box-shadow: 0px 3px 4px rgba(0,0,0,0.25);
+	box-shadow:         0px 3px 4px rgba(0,0,0,0.25);
+	margin: 0px 20px 20px 20px;
+
+}
+
+.render button, .render img {
+	float: left;
+}
+
+.render img {
+	margin-bottom: 5px;
+}
+
+.render a {
+	display: block;
+    float: left;
+    height: 24px;
+    padding: 6px 19px 0px 19px;
+	margin: 5px 10px 5px 0px;
+    font-weight: bold;
+    background-color: #F0F0F0;
+    border: 1px solid #F0F0F0;
+    color: #0D0D0D;
+    border-radius: 3px;
+	cursor: pointer;
+}
+
+.render a:hover {
+    color: #fff;
+    border: 1px solid #0033FF;
+    background-color: #0033FF;
+}
+
+.render a:active {
+    border: 1px solid #E44A5F;
+    background-color: #E44A5F;
+}
+
+.render .delete {
+	float:right;
+	margin-right: 0px;
+}
+
+
+a.uploadToTumblr {
+	clear: left;
+	color: #F0F3F7;
+	border: 1px solid #304661;
+	background: #304661 url('/assets/tumblrIcon.png') no-repeat 5px 5px;
+    padding: 6px 19px 0px 32px;
+
+}
+
+a.uploadToTumblr:hover {
+    color: #304661;
+    border: 1px solid #304661;
+    background: #9CACBA url('/assets/tumblrIcon.png') no-repeat 5px -25px;
+}
+
+a.uploadToTumblr.loading {
+    background-image: url('/assets/tumblrSpinner.gif');
+}
+
+a.uploadToTumblr.loading:hover {
+    color: #F0F3F7;
+    border: 1px solid #304661;
+    background-color: #304661;
+    background-image: url('/assets/tumblrSpinner.gif');
+    background-position: 5px 5px;
+}
+
+
+.progressMeter { display: none; }
+.render.inprogress .progressMeter { display:block; }
+
+.progressMeter {
+	padding-top: 100px;
+	text-align: center;
+	font-weight: bold;
+	background: transparent url('/assets/InProgress.gif') no-repeat center 0;    
+}
+
+.render.inprogress {
+	width:  200px;
+	height: 200px;
+}
+
+.render.inprogress button, .render.inprogress img {
+	display: none;
+}
+
+.row.footer {
+	background-color: transparent;
+}
+
+/* Modals */
+
+.modal {
+    background-color: #DDD;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -moz-box-shadow:    0px 8px 14px rgba(0,0,0,0.25);
+	-webkit-box-shadow: 0px 8px 14px rgba(0,0,0,0.25);
+	box-shadow:         0px 8px 14px rgba(0,0,0,0.25);
+    -webkit-transition-property: top, opacity;
+    -webkit-transition-duration: 0.5s, 0.5s;
+    -moz-transition-property: top, opacity;
+    -moz-transition-duration: 0.5s, 0.5s;
+    transition-property: top, opacity;
+    transition-duration: 0.5s, 0.5s;
+    -webkit-transition-timing-function: ease;
+    -moz-transition-timing-function: ease;
+    transition-timing-function: ease;
+}
+
+#newGifModal {
+    width:  300px;
+    height: 250px;
+    margin: -125px 0px 0px -150px;
+}
+
+#feedModal {
+    width:  560px;
+    height: 632px;
+    margin: -316px 0px 0px -280px;
+	z-index: 2;
+}
+
+#chromeMessage {
+    width: 350px;
+    height: 161px;
+    padding: 20px;
+    line-height: 150%;
+    margin: -150px 0px 0px -175px;
+    
+}
+
+#chromeMessage img {
+    float: left;
+    margin-right: 10px;
+}
+
+#chromeMessage .modal-buttons a { margin-left: 0px; float: right; }
+
+#loggedInModal {
+    width: 360px;
+    height: 260px;
+    margin: -130px 0px 0px -180px;
+}
+
+#loggedInModal .message {
+    margin: 0px 20px;
+    text-align: center;
+}
+
+#loggedInModal img {
+    margin: 0px 5px;
+}
+
+#loggedInModal .footnote {
+	font-size: 10px;
+	color:#666;
+	font-style: italic;
+}
+
+#aboutModal {
+    width: 350px;
+    height: 525px;
+    margin: -262px 0px 0px -375px;
+    line-height: 150%;
+
+}
+
+#aboutModal .message {
+    margin: 20px 20px 0px 20px ;
+    text-align: center;
+}
+
+#aboutModal h3, #feedModal h3, #helpModal h3 {
+    border-bottom: none;
+	margin-bottom: 0px;
+}
+#aboutModal h4, #helpModal h4 {
+	margin-top: 0px;
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+
+#aboutModal .modal-buttons a {
+	margin-top: 0px;
+}
+
+#tipsModal {
+	width: 350px;
+	height: 525px;
+    margin: -262px 0px 0px 0px;
+    line-height: 150%;
+	overflow: scroll;
+}
+
+#tipsModal p, #tipsModal ul, #aboutModal p {
+	margin: 10px 20px;
+	line-height: 150%;    
+}
+
+#tipsModal strong {
+	font-weight: bold;
+}
+
+#helpModal {
+    width: 870px;
+    height: 552px;
+    margin: -276px 0px 0px -435px;
+    line-height: 150%;
+}
+
+.helpInfo {
+	float: left;
+	width: 180px;
+	margin: 20px 0px 0px 10px;
+	text-align: center;
+}
+
+#helpModal h3 {
+	border: none;
+}
+
+#helpModal a {
+	float: none;
+}
+
+#helpModal p {
+	margin-bottom: 1em;
+}
+
+.helpInfo img {
+}
+
+#helpModal .helpImg {
+	float:right;
+	margin: 10px 10px 0px 0px;
+}
+
+.modal.closed {
+    top: -700px;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:alpha(opacity=0);
+}
+
+.modal h3 {
+    font-size: 24px;
+    margin: 10px 20px 10px 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #999;
+}
+
+.modal label{
+    float: left;
+    clear: left;
+    width: 60px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    padding-top: 4px;
+}
+
+.modal input {
+    float: left;
+    width: 50px;
+    margin-bottom: 20px;
+}
+.modal .modal-buttons {
+    float: left;
+    clear: left;
+    width: 100%;
+}
+
+.modal-buttons #closeModal { float: left; }
+.modal-buttons #initNewGif { float: right; }
+
+#lightbox {
+	position: absolute;
+	left: 0px;
+	top:  0px;
+	width:  100%;
+	height: 100%;
+	background-color: rgba(255,255,255,.5);
+	z-index: 1;
+}
+
+.lightoff {
+	display: none;
+}
+
+/* Colour Palette */
+
+.col1  {background-color: #000000;}
+.col2  {background-color: #FFFFFF;}
+.col3  {background-color: #95A5A5;}
+.col4  {background-color: #666666;}
+.col5  {background-color: #F45151;}
+.col6  {background-color: #C42020;}
+.col7  {background-color: #A4CF27;}
+.col8  {background-color: #448A1A;}
+.col9  {background-color: #33FF99;}
+.col10 {background-color: #19BD9B;}
+.col11 {background-color: #31A3F3;}
+.col12 {background-color: #005785;}
+.col13 {background-color: #F4F471;}
+.col14 {background-color: #FCC42C;}
+.col15 {background-color: #FFC4CC;}
+.col16 {background-color: #FF1493;}
+.col17 {background-color: #BB71CC;}
+.col18 {background-color: #6130CC;}
+.col19 {background-color: #F5E6A1;}
+.col20 {background-color: #A56422;}

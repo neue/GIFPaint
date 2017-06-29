@@ -31,17 +31,13 @@ function init(_width, _height, _totalFrames) {
    
    for (var i=0; i < frames.length; i++) {
        frames[i] = createGraphics(_width,_height);
-       frames[i].strokeWeight(5);
-       frames[i].stroke(255,0,0);
-       frames[i].fill(255,0,0);
-       frames[i].fill(0,0,0);
    }  
    
    // Setup Brushes
    leftBrush     = createGraphics(70,70);
    rightBrush    = createGraphics(70,70);
    
-   setBrush(15,color(0,0,0));
+   paintbrush.set(5,color(0,0,0));
 }
 
 function gotoFrame(_frame) {
@@ -72,11 +68,12 @@ function nextFrame() {
 // TEMP TOOLS
 
 function mouseDragged() {
-   brushLine(pmouseX,pmouseY,mouseX,mouseY,null);
+   paintbrush.use(pmouseX,pmouseY,mouseX,mouseY,null);
 }
 
 function mousePressed() {
-   drawBrush(mouseX,mouseY,null);
+   // paintbrush.use(mouseX,mouseY,mouseX,mouseY,null);
+   // paintbrush.drawBrush(mouseX,mouseY,null);
 }
 
 function mouseReleased(){

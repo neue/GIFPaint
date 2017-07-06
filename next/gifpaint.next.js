@@ -7,8 +7,11 @@ var frames;
 var totalFrames;
 var gifBackgroundColor;
 
-var leftBrush;
-var rightBrush;
+var leftBrush, rightBrush;
+var leftColor, rightColor;
+var brushWeight = 3;
+var toolBrushWeight;
+var mousePrevX,mousePrevY;
 
 
 function init(_width, _height, _totalFrames) {
@@ -34,10 +37,16 @@ function init(_width, _height, _totalFrames) {
    }  
    
    // Setup Brushes
-   leftBrush     = createGraphics(70,70);
-   rightBrush    = createGraphics(70,70);
+   mousePrevX = mouseX; 
+   mousePrevY = mouseY;
    
-   paintbrush.set(5,color(0,0,0));
+   leftColor = color(0,0,0);
+   rightColor = color(255,0,0);
+   
+   toolBrushWeight = createSlider(1, 34, brushWeight);
+   toolBrushWeight.input(toolBrushWeightSet);
+
+   paintbrush.set(brushWeight,leftColor);
 }
 
 function gotoFrame(_frame) {
@@ -67,16 +76,27 @@ function nextFrame() {
 
 // TEMP TOOLS
 
+
+function mouseMoved() {
+   mousePrevX = mouseX;
+   mousePrevY = mouseY;
+}
 function mouseDragged() {
-   paintbrush.use(pmouseX,pmouseY,mouseX,mouseY,null);
+   paintbrush.use(mousePrevX,mousePrevY,mouseX,mouseY,null);      
+   mousePrevX = mouseX;
+   mousePrevY = mouseY;
 }
 
 function mousePressed() {
-   // paintbrush.use(mouseX,mouseY,mouseX,mouseY,null);
-   // paintbrush.drawBrush(mouseX,mouseY,null);
+   paintbrush.use(mouseX,mouseY,mouseX,mouseY,null);      
+   
 }
 
-function mouseReleased(){
+function toolBrushWeightSet(){
+     paintbrush.set(toolBrushWeight.value(),leftColor);
+}
+
+function mouseReleased() {
     // frames[currentFrame].loadPixels();
     redrawFrame(currentFrame);
  }
@@ -84,9 +104,32 @@ function mouseReleased(){
  function keyPressed() {
    if (keyCode === LEFT_ARROW) {
       prevFrame();
-   } else if (keyCode === RIGHT_ARROW) {
+   }
+   if (keyCode === RIGHT_ARROW) {
       nextFrame();
    }
-   console.log(currentFrame);
+   // -
+   if (keyCode === 187) {
+      brushWeight++;
+      brushWeight = constrain(brushWeight,1,34);
+      paintbrush.set(brushWeight,leftColor);
+   }
+   // +
+   if (keyCode === 189) {
+      brushWeight--;
+      brushWeight = constrain(brushWeight,1,34);
+      paintbrush.set(brushWeight,leftColor);
+   }
+   // R
+   if (keyCode === 82) {
+      leftColor = color(
+         random(0,255),
+         random(0,255),
+         random(0,255)
+      );
+      paintbrush.set(brushWeight,leftColor);
+      
+   }
+
  }
 // END TEMP TOOLS

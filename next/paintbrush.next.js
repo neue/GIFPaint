@@ -1,5 +1,5 @@
 function tool_paintbrush() {
-  
+   
   tool_paintbrush.prototype.use = function(x,y,x2,y2,mouseButton){
 
     var brushCanvas = null;
@@ -52,7 +52,6 @@ function tool_paintbrush() {
     // frames[currentFrame].ellipse(_x,_y,20,20);
     var _x = Math.floor(_x);
     var _y = Math.floor(_y);
-        tint(255, 1);
     imageMode(CENTER);
     frames[currentFrame].imageMode(CENTER);
     image(brushCanvas,_x,_y);
@@ -134,12 +133,24 @@ function tool_paintbrush() {
     targetCanvas.set(x,y,color(R,G,B));
   };
   
-  tool_paintbrush.prototype.set = function(size,brushColor){
+  tool_paintbrush.prototype.set = function(_size,brushColor){
+     if (leftBrush) {
+        leftBrush.remove();        
+     }
     leftBrush     = createGraphics(70,70);
-    this.bCircle(35,35,size,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+    leftBrush.parent('brushPreview');
+    leftBrush.show();
+    if (_size == 1) {
+      this.setPixel(35,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+    } else if (_size == 2) {
+      this.setPixel(35,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+      this.setPixel(36,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+      this.setPixel(35,36,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+      this.setPixel(36,36,leftBrush,red(brushColor),green(brushColor),blue(brushColor));    
+    } else {
+        this.bCircle(35,35,_size-2,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+    };
     leftBrush.updatePixels();
-    image(leftBrush,50,50);
-
   };
 }
 

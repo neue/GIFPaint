@@ -1,8 +1,11 @@
 function tool_paintbrush() {
    
   tool_paintbrush.prototype.use = function(x,y,x2,y2,mouseButton){
-
-    var brushCanvas = null;
+    if (mouseButton == LEFT) {
+      var brushCanvas = leftBrush;
+    } else {
+      var brushCanvas = rightBrush;            
+    }
     var yLonger = false;
     var shortLen = y2-y;
     var longLen = x2-x;
@@ -46,10 +49,7 @@ function tool_paintbrush() {
     }
   };
   
-  tool_paintbrush.prototype.drawBrush = function(_x,_y,meh){
-    brushCanvas = leftBrush;
-    // ellipse(_x,_y,20,20);
-    // frames[currentFrame].ellipse(_x,_y,20,20);
+  tool_paintbrush.prototype.drawBrush = function(_x,_y,brushCanvas){
     var _x = Math.floor(_x);
     var _y = Math.floor(_y);
     imageMode(CENTER);
@@ -133,24 +133,38 @@ function tool_paintbrush() {
     targetCanvas.set(x,y,color(R,G,B));
   };
   
-  tool_paintbrush.prototype.set = function(_size,brushColor){
+  tool_paintbrush.prototype.set = function(_size,leftColor){
      if (leftBrush) {
         leftBrush.remove();        
      }
     leftBrush     = createGraphics(70,70);
+    rightBrush    = createGraphics(70,70);
     leftBrush.parent('brushPreview');
     leftBrush.show();
     if (_size == 1) {
-      this.setPixel(35,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+      // left
+      this.setPixel(35,35,leftBrush,red(leftColor),green(leftColor),blue(leftColor));
+      // right
+      this.setPixel(35,35,rightBrush,red(rightColor),green(rightColor),blue(rightColor));
     } else if (_size == 2) {
-      this.setPixel(35,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
-      this.setPixel(36,35,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
-      this.setPixel(35,36,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
-      this.setPixel(36,36,leftBrush,red(brushColor),green(brushColor),blue(brushColor));    
+      // left
+      this.setPixel(35,35,leftBrush,red(leftColor),green(leftColor),blue(leftColor));
+      this.setPixel(36,35,leftBrush,red(leftColor),green(leftColor),blue(leftColor));
+      this.setPixel(35,36,leftBrush,red(leftColor),green(leftColor),blue(leftColor));
+      this.setPixel(36,36,leftBrush,red(leftColor),green(leftColor),blue(leftColor));    
+      // right
+      this.setPixel(35,35,rightBrush,red(rightColor),green(rightColor),blue(rightColor));
+      this.setPixel(36,35,rightBrush,red(rightColor),green(rightColor),blue(rightColor));
+      this.setPixel(35,36,rightBrush,red(rightColor),green(rightColor),blue(rightColor));
+      this.setPixel(36,36,rightBrush,red(rightColor),green(rightColor),blue(rightColor));    
     } else {
-        this.bCircle(35,35,_size-2,leftBrush,red(brushColor),green(brushColor),blue(brushColor));
+      // left
+      this.bCircle(35,35,_size-2,leftBrush,red(leftColor),green(leftColor),blue(leftColor));
+      // left
+      this.bCircle(35,35,_size-2,rightBrush,red(rightColor),green(rightColor),blue(rightColor));
     };
     leftBrush.updatePixels();
+    rightBrush.updatePixels();
   };
 }
 

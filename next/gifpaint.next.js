@@ -11,6 +11,7 @@ var leftBrush, rightBrush;
 var leftColor, rightColor;
 var brushWeight = 3;
 var toolBrushWeight;
+var colorPickerLeft, colorPickerRight;
 var mousePrevX,mousePrevY;
 
 
@@ -25,10 +26,14 @@ function init(_width, _height, _totalFrames) {
    pixelDensity(1);
    paintCanvas.id('paintCanvas');
    paintCanvas.parent('canvasBorder');
+   // Disable context menu
+   paintCanvas.elt.oncontextmenu = function (e) {
+    e.preventDefault();
+   };
    
    totalFrames = _totalFrames;
    frames = new Array(totalFrames);
-   gifBackgroundColor = color(200);
+   gifBackgroundColor = color(240);
    background(gifBackgroundColor);
    
    
@@ -40,11 +45,21 @@ function init(_width, _height, _totalFrames) {
    mousePrevX = mouseX; 
    mousePrevY = mouseY;
    
-   leftColor = color(0,0,0);
-   rightColor = color(255,0,0);
    
    toolBrushWeight = createSlider(1, 34, brushWeight);
    toolBrushWeight.input(toolBrushWeightSet);
+   toolBrushWeight.parent('toolbox');
+   
+   colorPickerLeft = createInput("#000000",'color');
+   colorPickerLeft.input(toolSetColors);
+   colorPickerLeft.parent('toolbox');
+
+   colorPickerRight = createInput("#FFFFFF",'color');
+   colorPickerRight.input(toolSetColors);
+   colorPickerRight.parent('toolbox');
+   
+   leftColor = color(colorPickerLeft.value());
+   rightColor = color(colorPickerRight.value());
 
    paintbrush.set(brushWeight,leftColor);
 }
@@ -82,18 +97,24 @@ function mouseMoved() {
    mousePrevY = mouseY;
 }
 function mouseDragged() {
-   paintbrush.use(mousePrevX,mousePrevY,mouseX,mouseY,null);      
+   paintbrush.use(mousePrevX,mousePrevY,mouseX,mouseY,mouseButton);      
    mousePrevX = mouseX;
    mousePrevY = mouseY;
 }
 
 function mousePressed() {
-   paintbrush.use(mouseX,mouseY,mouseX,mouseY,null);      
-   
+   paintbrush.use(mouseX,mouseY,mouseX,mouseY,mouseButton);  
 }
 
 function toolBrushWeightSet(){
-     paintbrush.set(toolBrushWeight.value(),leftColor);
+  brushWeight = toolBrushWeight.value();
+  paintbrush.set(brushWeight,leftColor);
+}
+
+function toolSetColors(){
+  leftColor = color(colorPickerLeft.value());
+  rightColor = color(colorPickerRight.value());
+  paintbrush.set(brushWeight,leftColor);
 }
 
 function mouseReleased() {
@@ -112,23 +133,28 @@ function mouseReleased() {
    if (keyCode === 187) {
       brushWeight++;
       brushWeight = constrain(brushWeight,1,34);
+      toolBrushWeight.value(brushWeight);
       paintbrush.set(brushWeight,leftColor);
    }
    // +
    if (keyCode === 189) {
       brushWeight--;
       brushWeight = constrain(brushWeight,1,34);
+      toolBrushWeight.value(brushWeight);
       paintbrush.set(brushWeight,leftColor);
    }
    // R
    if (keyCode === 82) {
-      leftColor = color(
+      let newColor = color(
          random(0,255),
          random(0,255),
          random(0,255)
       );
-      paintbrush.set(brushWeight,leftColor);
+      let rgb = blue(newColor) | (green(newColor) << 8) | (red(newColor) << 16);
+      let newColorHex = '#' + (0x1000000 + rgb).toString(16).slice(1)
       
+      colorPickerLeft.value(newColorHex);
+      toolSetColors();
    }
 
  }

@@ -46,7 +46,7 @@ function init(_width, _height, _totalFrames) {
    mousePrevY = mouseY;
    
    
-   toolBrushWeight = createSlider(1, 34, brushWeight);
+   toolBrushWeight = createSlider(1, 50, brushWeight);
    toolBrushWeight.input(toolBrushWeightSet);
    toolBrushWeight.parent('toolbox');
    
